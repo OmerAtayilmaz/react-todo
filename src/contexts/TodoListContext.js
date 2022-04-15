@@ -1,37 +1,26 @@
-import React,{createContext,useState} from 'react';
+import React,{createContext,useState,useReducer} from 'react';
 import uniqid from 'uniqid';
 
 export const TodoListContext=createContext();
+const todosReducer=(state,action)=>{
+    switch(action.type){
+        case 'ADD_TODO':
+            return [ ...state, { id:uniqid(), text:action.text,status:0 } ]
+        case 'REMOVE_TODO':
+            return state.filter((todo)=> todo.id!==action.id );
+        default: 
+            return state;
+    }
+};
+
 
 const TodoListContextProvider=({children})=>{
-    const [todos,setTodos]=useState([
-        {text:"Plan the family trip",id:1},
-        {text:"Go shopping for dinner", id:3} ,
-        {text:"Go for walk",id:2} 
+    const [todos,dispatch]=useReducer(todosReducer,[
+        {text:"Plan the family trip",id:"1",status:0},
+        {text:"Go shopping for dinner", id:"3",status:0} ,
+        {text:"Go for walk",id:"2",status:0} 
     ]);
-    const [completedTodos,setCompletedTodos]=useState([]);
-    const [removedTodos,setRemovedTodos]=useState([]);
-    const addTodo=(todo)=>{
-        setTodos([
-            ...todos,
-            {text:todo,id:uniqid()}]);
-    };
-
-    const removeTodo=(id)=>{
-        setTodos(todos.filter(todo=>{
-            if(!todo.id!=id)
-                setRemovedTodos([...removedTodos,todo])
-            return todo.id!=id;
-        }));
-    }
-    const completeTodo=(id)=>{
-        setTodos(todos.filter(todo=>{
-            if(!todo.id!=id)
-                setCompletedTodos([...completedTodos,todo])
-            return todo.id!=id;
-        }))
-    }
-    return <TodoListContext.Provider value={{todos,completedTodos,removedTodos,addTodo,removeTodo,completeTodo}}>{children}</TodoListContext.Provider>
+    return <TodoListContext.Provider value={{todos,dispatch}}>{children}</TodoListContext.Provider>
 }
 
 export default TodoListContextProvider;

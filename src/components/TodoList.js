@@ -2,20 +2,21 @@ import React, { useEffect, useState,useContext } from "react";
 import { TodoListContext } from "../contexts/TodoListContext";
 const TodoList = () => {
   const [todo,setTodo]=useState();
-  const {todos,addTodo,completedTodos,removedTodos,removeTodo,completeTodo}=useContext(TodoListContext);
+  const {todos,dispatch}=useContext(TodoListContext);
   const [count, setCount] = useState(0);
   const handleChange = (e) => {
     setTodo(e.target.value);
   };
   const handleFormSubmit=(e)=>{
     e.preventDefault();
-    addTodo(todo);
+    dispatch({type:'ADD_TODO',text:todo})
   }
   const handleRemoveTodo=(e)=>
-    removeTodo(e.target.id);
-  const handleCompleteTodo=(e)=>
-    completeTodo(e.target.id);
-  
+    dispatch({type:'REMOVE_TODO',id:e.target.id})
+  const handleCompleteTodo=(e)=>{
+    dispatch({type:'COMPLETE_TODO',id:e.target.id});
+    console.log(e.target.id);
+  }
   useEffect(() => {
     //console.log("use effect for todos", todos);
   }, [todos]);
@@ -43,7 +44,7 @@ const TodoList = () => {
           </div>
         )):<h4>You don't have any todo!</h4>}
 
-        <div class="container-footer">
+        <div className="container-footer">
         <form onSubmit={handleFormSubmit}>
             <div className="ui centered action input">
             <input
@@ -56,18 +57,18 @@ const TodoList = () => {
             </button>
              </div>
         </form>
-        <div class="right-side">
+        <div className="right-side">
         <div className="ui labeled button container-counter" tabIndex="0">
           <div className="ui green button ">
             <i className="fas fa-check"></i> Completed
           </div>
-          <a className="ui basic green left pointing label">{completedTodos.length}</a>
+          <a className="ui basic green left pointing label">{todos.reduce((prev,current)=>current.status&&prev+1,0)}</a>
         </div>
         <div className="ui labeled button container-counter" tabIndex="0">
           <div className="ui red button ">
-          <i class="fas fa-trash"></i> Trash
+          <i className="fas fa-trash"></i> Trash
           </div>
-          <a className="ui basic red left pointing label">{removedTodos.length}</a>
+          <a className="ui basic red left pointing label">1</a>
         </div>
         </div>
         </div>
