@@ -29,3 +29,11 @@ form {
 .container-counter {
   margin-top: 15px !important;
 }
+
+.header {
+  display:flex !important;
+  justify-content:space-between !important;
+}
+.icon-done{
+  margin-right: 3px !important;
+}
