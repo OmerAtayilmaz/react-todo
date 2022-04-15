@@ -10,6 +10,7 @@ const TodoListContextProvider=({children})=>{
         {text:"Go for walk",id:2} 
     ]);
     const [completedTodos,setCompletedTodos]=useState([]);
+    const [removedTodos,setRemovedTodos]=useState([]);
     const addTodo=(todo)=>{
         setTodos([
             ...todos,
@@ -19,13 +20,18 @@ const TodoListContextProvider=({children})=>{
     const removeTodo=(id)=>{
         setTodos(todos.filter(todo=>{
             if(!todo.id!=id)
-                setCompletedTodos([...completedTodos,todo])
-            
+                setRemovedTodos([...removedTodos,todo])
             return todo.id!=id;
         }));
     }
-    
-    return <TodoListContext.Provider value={{todos,completedTodos,addTodo,removeTodo,}}>{children}</TodoListContext.Provider>
+    const completeTodo=(id)=>{
+        setTodos(todos.filter(todo=>{
+            if(!todo.id!=id)
+                setCompletedTodos([...completedTodos,todo])
+            return todo.id!=id;
+        }))
+    }
+    return <TodoListContext.Provider value={{todos,completedTodos,removedTodos,addTodo,removeTodo,completeTodo}}>{children}</TodoListContext.Provider>
 }
 
 export default TodoListContextProvider;

@@ -30,7 +30,7 @@ form {
   margin-top: 15px !important;
 }
 
-.header {
+.header,.container-footer {
   display:flex !important;
   justify-content:space-between !important;
 }
